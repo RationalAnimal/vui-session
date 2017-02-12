@@ -31,7 +31,7 @@ var session = {};
  * any object.
  * @param {object} app - The object to which the functionality should be added.
  */
-inputs.addSessionToApp = function(app){
+session.addSessionToApp = function(app){
   if(app.sessionAlreadyAdded == true){
     return;
   }

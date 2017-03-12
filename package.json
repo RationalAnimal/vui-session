@@ -1,6 +1,6 @@
 {
   "name": "vui-session",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "npm module that provides session related functions for inclusion into other vui-xxx projects.",
   "main": "index.js",
   "scripts": {

@@ -36,6 +36,8 @@ describe("vui-session", function() {
       var scratchSession2 = new app.Session(["abc-456", "old-session-id"], true, "voiceApp1", "user-123", {"firstName": "Jim", "lastName": "Brown"});
       expect(scratchSession2.getCurrentSessionId()).to.equal("abc-456");
       expect(scratchSession2.getOldSessionIds()).to.eql(["old-session-id"]);
+      expect(scratchSession2.getIsNew()).to.equal(true);
+      expect(scratchSession2.getClientId()).to.equal("voiceApp1");
       expect(scratchSession2.getUserId()).to.equal("user-123");
       expect(scratchSession2.getUserFirstName()).to.equal("Jim");
       expect(scratchSession2.getUserLastName()).to.equal("Brown");

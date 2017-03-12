@@ -97,7 +97,7 @@ session.Session = function(sessionIds, isNew, clientId, userId, userRealName){
     }
     return returnValue;
   }
-  this.isNew = function(){
+  this.getIsNew = function(){
     return this.isNew;
   }
   this.setIsNew = function(isNew){

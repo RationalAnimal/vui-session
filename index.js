@@ -97,16 +97,16 @@ session.Session = function(sessionIds, isNew, clientId, userId, userRealName){
     }
     return returnValue;
   }
-  this.isNew(){
+  this.isNew = function(){
     return this.isNew;
   }
-  this.setIsNew(isNew){
+  this.setIsNew = function(isNew){
     this.isNew = isNew;
   }
-  this.getClientId(){
+  this.getClientId = function(){
     return this.clientId;
   }
-  this.setClientId(cliendId){
+  this.setClientId = function(cliendId){
     this.clientId = clientId;
   }
   this.getUserId = function(){

@@ -106,7 +106,7 @@ session.Session = function(sessionIds, isNew, clientId, userId, userRealName){
   this.getClientId = function(){
     return this.clientId;
   }
-  this.setClientId = function(cliendId){
+  this.setClientId = function(clientId){
     this.clientId = clientId;
   }
   this.getUserId = function(){

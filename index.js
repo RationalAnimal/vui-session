@@ -39,6 +39,24 @@ session.addSessionToApp = function(app){
   app.Session = session.Session;
 };
 
+/**
+* @constructor for the Session object.
+* @param {object[]} - sessionIds, should be an array of objects, each containing
+* a session ID and a platform ID.  However, since frequently there will only be
+* a single supported platform, it is acceptable to pass in an array of just
+* session IDs and the platform will not be set.
+* @param {boolean} - isNew, true if this session is new, false otherwise.
+* IMPORTANT: this refers to the platform's own definition of new, NOT to the
+* longer, persistent context.  Thus, for example, on Alexa you can start a new
+* session that ends up being a continuation of a previous one.  However, Alexa
+* itself doesn't know about this.  So this value reflects Alexa's understanding
+* of "new session".
+* @param {string} - the id of the application that is invoking the back end. For
+* example, on Alexa this would be skill ID.
+* @param {string} - user id.  This is the id of the user on a particular
+* platform.
+*
+*/
 session.Session = function(sessionIds, isNew, clientId, userId, userRealName){
   this.sessionIds = [];
   if(typeof sessionIds == "undefined"){
@@ -50,20 +68,24 @@ session.Session = function(sessionIds, isNew, clientId, userId, userRealName){
       if(typeof scratchId == "undefined"){
         // Do nothing
       }
+      else if(typeof scratchId.sessionId != "undefined"){
+        this.sessionIds.push({"sessionId":scratchId.sessionId, "platformId":(typeof scratchId.platformId == "undefined"?"":""+scratchId.platformId)});
+      }
       else if(typeof scratchId == "string"){
-        this.sessionIds.push(scratchId);
+        this.sessionIds.push({"sessionId": scratchId, "platformId": ""});
       }
       else {
-        this.sessionIds.push("" + scratchId);
+        this.sessionIds.push({"sessionId": "" + scratchId, "platformId": ""});
       }
     }
   }
   else if(typeof sessionIds == "string"){
-    this.sessionIds.push(sessionIds);
+    this.sessionIds.push({"sessionId":sessionIds, "platformId": ""});
   }
   else {
-    this.sessionIds.push("" + sessionIds);
+    this.sessionIds.push({"sessionId": "" + sessionIds, "platformId": ""});
   }
+
   this.isNew = isNew;
   this.clientId = clientId;
   this.User = function(userId, userRealName){
@@ -83,10 +105,21 @@ session.Session = function(sessionIds, isNew, clientId, userId, userRealName){
     if(this.sessionIds.length >= 1){
       return this.sessionIds[0];
     }
-    return "";
+    return {"sessionId": "", "platformId": ""};
   }
   this.setCurrentSessionId = function(newId){
-    this.sessionIds.unshift(newId);
+    if(typeof newId == "undefined"){
+      // Do nothing
+    }
+    else if(typeof newId.sessionId != "undefined"){
+      this.sessionIds.unshift({"sessionId":newId.sessionId, "platformId":(typeof newId.platformId == "undefined"?"":""+newId.platformId)});
+    }
+    else if(typeof scratchId == "string"){
+      this.sessionIds.unshift({"sessionId": newId, "platformId": ""});
+    }
+    else {
+      this.sessionIds.unshift({"sessionId": "" + newId, "platformId": ""});
+    }
   }
   this.getOldSessionIds = function(){
     var returnValue = [];

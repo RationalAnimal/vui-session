@@ -31,11 +31,11 @@ describe("vui-session", function() {
 
     it("verify Session constructor and getter functions", function() {
       var scratchSession = new app.Session("abc-123", true, "voiceApp1", "user-123", {"firstName": "Jim", "lastName": "Brown"});
-      expect(scratchSession.getCurrentSessionId()).to.equal("abc-123");
+      expect(scratchSession.getCurrentSessionId()).to.eql({"sessionId": "abc-123", "platformId": ""});
 
       var scratchSession2 = new app.Session(["abc-456", "old-session-id"], true, "voiceApp1", "user-123", {"firstName": "Jim", "lastName": "Brown"});
-      expect(scratchSession2.getCurrentSessionId()).to.equal("abc-456");
-      expect(scratchSession2.getOldSessionIds()).to.eql(["old-session-id"]);
+      expect(scratchSession2.getCurrentSessionId()).to.eql({"sessionId": "abc-456", "platformId": ""});
+      expect(scratchSession2.getOldSessionIds()).to.eql([{"sessionId": "old-session-id", "platformId":""}]);
       expect(scratchSession2.getIsNew()).to.equal(true);
       expect(scratchSession2.getClientId()).to.equal("voiceApp1");
       expect(scratchSession2.getUserId()).to.equal("user-123");
@@ -43,14 +43,22 @@ describe("vui-session", function() {
       expect(scratchSession2.getUserLastName()).to.equal("Brown");
       expect(scratchSession2.getUser()).to.eql({"userId": "user-123", "name": {"first": "Jim", "last": "Brown"}});
       scratchSession2.setCurrentSessionId("NewID");
+      scratchSession2.setIsNew(false);
+      scratchSession2.setClientId("voiceApp2");
       scratchSession2.setUserId("NewUser");
       scratchSession2.setUserFirstName("Bob");
       scratchSession2.setUserLastName("Smith");
-      expect(scratchSession2.getCurrentSessionId()).to.equal("NewID");
-      expect(scratchSession2.getOldSessionIds()).to.eql(["abc-456","old-session-id"]);
+      expect(scratchSession2.getCurrentSessionId()).to.eql({"sessionId": "NewID", "platformId": ""});
+      expect(scratchSession2.getOldSessionIds()).to.eql([{"sessionId": "abc-456", "platformId": ""},{"sessionId": "old-session-id", "platformId":""}]);
+      expect(scratchSession2.getIsNew()).to.equal(false);
+      expect(scratchSession2.getClientId()).to.equal("voiceApp2");
       expect(scratchSession2.getUserId()).to.equal("NewUser");
       expect(scratchSession2.getUserFirstName()).to.equal("Bob");
       expect(scratchSession2.getUserLastName()).to.equal("Smith");
+
+      var scratchSession3 = new app.Session([{"sessionId": "abc-789", "platformId": "Alexa"}], true, "voiceApp1", "user-123", {"firstName": "Jim", "lastName": "Brown"});
+      expect(scratchSession3.getCurrentSessionId()).to.eql({"sessionId": "abc-789", "platformId": "Alexa"});
+
     });
 
   });
